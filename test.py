@@ -7,8 +7,7 @@ def alm_login(username, password, domain, project):
     td.Connect(domain, project)
     if td.Connected:
         print("connect successfully")
-    else:
-        print("Not connected")
+
 
 
 if __name__ == "__main__":
