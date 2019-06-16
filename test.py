@@ -9,7 +9,7 @@ def alm_login(username, password, domain, alm_project):
         print("connect successfully")
 
 
-def get_build_list(project_path):
+def get_test_set_list(project_path):
     test_set_folder_factory = td.TestSetTreeManager
     test_set_folder = test_set_folder_factory.NodeByPath(project_path)
     test_set_factory = test_set_folder.TestSetFactory
@@ -44,15 +44,35 @@ def map_column_label(label_list):
 
 
 def get_test_instance_property(test_instance):
+    current_case_property_dict = get_test_case_property(test_instance.testid)
     instance_property_dict = {
         "test_instance_id": test_instance.id,
         "test_instance_status": test_instance.status,
-        "test_instance_L1": test_instance.Field(map_dict.get("L1 Feature")),
-        "test_instance_L2": test_instance.Field(map_dict.get("L2 Feature")),
-        "test_instance_L3": test_instance.Field(map_dict.get("L3 Feature")),
-        "test_instance_L4": test_instance.Field(map_dict.get("L4 Feature")),
+        "test_instance_test_id": test_instance.testid,
+        "test_instance_test_name": test_instance.testname,
+        "test_instance_L1": current_case_property_dict["L1"],
+        "test_instance_L2": current_case_property_dict["L2"],
+        "test_instance_L3": current_case_property_dict["L3"],
+        "test_instance_L4": current_case_property_dict["L4"]
     }
     return instance_property_dict
+
+
+def get_test_case_property(test_case_id):
+    test_factory = td.TestFactory
+    test_filter = test_factory.Filter
+    test_filter["TS_TEST_ID"] = test_case_id
+    test_list = test_filter.NewList()
+    test_case = test_list[0]
+    case_property_dict = {
+        "test_id": test_case.ID,
+        "test_name": test_case.Name,
+        "L1": test_case.Field(map_dict.get("L1 Feature")),
+        "L2": test_case.Field(map_dict.get("L2 Feature")),
+        "L3": test_case.Field(map_dict.get("L3 Feature")),
+        "L4": test_case.Field(map_dict.get("L4 Feature"))
+    }
+    return case_property_dict
 
 
 if __name__ == "__main__":
@@ -67,8 +87,8 @@ if __name__ == "__main__":
         )
         exit()
     try:
-        alm_login("chen.si", "P@ssw0rd", "TEST", "Test_WES")
-        print(get_build_list(r"Root\Test_Chen").count)
+        alm_login("chen.si_hp.com", "P@ssw0rd", "TEST", "Test_WES")
+        print(get_test_set_list(r"Root\Test_Chen").count)
         user_label_list = [
             'L1 Feature',
             'L2 Feature',
@@ -76,9 +96,9 @@ if __name__ == "__main__":
             'L4 Feature'
         ]
         map_dict = map_column_label(user_label_list)
-        for ts in (get_build_list(r"Root\Test_Chen")):
-            # print(get_test_instance_list(ts).count)
-            print(get_test_instance_property(ts))
+        for test_set in (get_test_set_list(r"Root\Test_Chen")):
+            for instance in get_test_instance_list(test_set):
+                print(get_test_instance_property(instance))
 
     except Exception as e:
         print(e)
