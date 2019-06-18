@@ -18,13 +18,13 @@ def get_total_execution_detail(result_file_path, test_instance_list):
         ws_total_execution_detail = wb[sheet_name]
         # Initial Table
         ws_total_execution_detail.cell(1, 1).value = "Test ID"
-        ws_total_execution_detail.cell(1, 2).value = "Test ID"
-        ws_total_execution_detail.cell(1, 3).value = "L1 Feature"
-        ws_total_execution_detail.cell(1, 4).value = "L2 Feature"
-        ws_total_execution_detail.cell(1, 5).value = "L3 Feature"
-        ws_total_execution_detail.cell(1, 6).value = "L4 Feature"
-        ws_total_execution_detail.cell(1, 7).value = "test_instance_path"
-        ws_total_execution_detail.cell(1, 8).value = "test_set_name"
+        ws_total_execution_detail.cell(1, 2).value = "L1 Feature"
+        ws_total_execution_detail.cell(1, 3).value = "L2 Feature"
+        ws_total_execution_detail.cell(1, 4).value = "L3 Feature"
+        ws_total_execution_detail.cell(1, 5).value = "L4 Feature"
+        ws_total_execution_detail.cell(1, 6).value = "test_instance_path"
+        ws_total_execution_detail.cell(1, 7).value = "test_set_name"
+        ws_total_execution_detail.cell(1, 8).value = "Test Instance ID"
         ws_total_execution_detail.cell(1, 9).value = "test_instance_status"
         row = 2
         for test_instance_property in test_instance_list:
@@ -35,7 +35,8 @@ def get_total_execution_detail(result_file_path, test_instance_list):
             ws_total_execution_detail.cell(row, 5).value = test_instance_property["test_instance_L4"]
             ws_total_execution_detail.cell(row, 6).value = test_instance_property["test_instance_path"]
             ws_total_execution_detail.cell(row, 7).value = test_instance_property["test_set_name"]
-            ws_total_execution_detail.cell(row, 8).value = test_instance_property["test_instance_status"]
+            ws_total_execution_detail.cell(row, 8).value = test_instance_property["test_instance_id"]
+            ws_total_execution_detail.cell(row, 9).value = test_instance_property["test_instance_status"]
             row = row + 1
         wb.save(result_file_path)
     except Exception as e:
