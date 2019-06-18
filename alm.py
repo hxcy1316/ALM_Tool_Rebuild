@@ -18,7 +18,7 @@ class ALM:
         self.td.Login(self.user_name, self.password)
         self.td.Connect(self.domain, self.project)
         if self.td.Connected:
-            print("connect successfully")
+            print("{} login successfully to project {} in domain {}".format(self.user_name, self.project, self.domain))
 
     def get_test_lab_sub_folder(self, parent_path):
         test_set_folder_factory = self.td.TestSetTreeManager
@@ -57,7 +57,7 @@ class ALM:
                 find_label = True
                 return field_property.DBColumnName
         if find_label is False:
-            print("Can't find the property " + label)
+            print("Can't find the property {}".format(label))
             return False
 
     def map_column_label(self, label_list):

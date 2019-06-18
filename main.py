@@ -31,10 +31,17 @@ def main():
                 for instance in alm_instance.get_test_instance_list(test_set):
                     # print(instance.id)
                     alm_instance.full_instance_list.append(alm_instance.get_test_instance_property(sub_folder.path, test_set.Name, instance))
-        print(len(alm_instance.full_instance_list))
+        print("Add {} instances into list.".format(len(alm_instance.full_instance_list)))
         # Write to Excel
         file_path = r"C:\My Doc\My Github\ALM_Tool_REBUILD\test.xlsx"
-        excel.get_execution_detail(file_path, alm_instance.full_instance_list)
+        # excel.get_execution_detail(file_path, alm_instance.full_instance_list)
+        excel_app = excel.EXCEL(file_path, alm_instance.full_instance_list)
+        try:
+            excel_app.get_execution_detail()
+        except Exception as e:
+            print(e)
+        finally:
+            excel_app.close()
     # Continue with alm
     except Exception as e:
         print(e)
