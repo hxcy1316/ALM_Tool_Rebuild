@@ -1,7 +1,5 @@
 import win32com.client
 
-td = win32com.client.Dispatch("TDApiOle80.TDConnection")
-
 
 class ALM:
     def __init__(self, url, user_name, password, domain, project):
@@ -13,16 +11,17 @@ class ALM:
         self.map_dict = {}
         self.full_lab_sub_folder_list = []
         self.full_instance_list = []
+        self.td = win32com.client.Dispatch("TDApiOle80.TDConnection")
 
     def login(self):
-        td.InitConnection(self.url)
-        td.Login(self.user_name, self.password)
-        td.Connect(self.domain, self.project)
-        if td.Connected:
+        self.td.InitConnection(self.url)
+        self.td.Login(self.user_name, self.password)
+        self.td.Connect(self.domain, self.project)
+        if self.td.Connected:
             print("connect successfully")
 
     def get_test_lab_sub_folder(self, parent_path):
-        test_set_folder_factory = td.TestSetTreeManager
+        test_set_folder_factory = self.td.TestSetTreeManager
         test_set_folder = test_set_folder_factory.NodeByPath(parent_path)
         if test_set_folder.count > 0:
             return test_set_folder.SubNodes
@@ -38,7 +37,7 @@ class ALM:
         return self.full_lab_sub_folder_list
 
     def get_test_set_list(self, test_lab_folder_path):
-        test_set_folder_factory = td.TestSetTreeManager
+        test_set_folder_factory = self.td.TestSetTreeManager
         test_set_folder = test_set_folder_factory.NodeByPath(test_lab_folder_path)
         test_set_factory = test_set_folder.TestSetFactory
         test_set_list = test_set_factory.NewList("")
@@ -50,7 +49,7 @@ class ALM:
         return test_instance_list
 
     def get_table_column_by_label(self, table, label):
-        field_list = td.Fields(table)
+        field_list = self.td.Fields(table)
         find_label = False
         for field in field_list:
             field_property = field.Property
@@ -85,7 +84,7 @@ class ALM:
         return instance_property_dict
 
     def get_test_case_property(self, test_case_id):
-        test_factory = td.TestFactory
+        test_factory = self.td.TestFactory
         test_filter = test_factory.Filter
         test_filter["TS_TEST_ID"] = test_case_id
         test_list = test_filter.NewList()
@@ -101,7 +100,7 @@ class ALM:
         return case_property_dict
 
     def disconnect(self):
-        td.Disconnect()
+        self.td.Disconnect()
 
 
 if __name__ == "__main__":
@@ -115,26 +114,26 @@ if __name__ == "__main__":
     try:
 
         a.login()
-        a.get_test_lab_sub_folder_recursively(path)
-        user_label_list = [
-            'L1 Feature',
-            'L2 Feature',
-            'L3 Feature',
-            'L4 Feature'
-        ]
-        a.map_dict = a.map_column_label(user_label_list)
-        # Get test set from test_set_root_path and load instance to list
-        if a.get_test_set_list(path).count > 0:
-            for test_set in a.get_test_set_list(path):
-                for instance in a.get_test_instance_list(test_set):
-                    a.full_instance_list.append(a.get_test_instance_property(path, test_set.Name, instance))
-        # Get test set from sub folder of test_set_root_path and loal instance to list
-        for sub_folder in a.full_lab_sub_folder_list:
-            for test_set in a.get_test_set_list(sub_folder.Path):
-                for instance in a.get_test_instance_list(test_set):
-                    # print(instance.id)
-                    a.full_instance_list.append(a.get_test_instance_property(sub_folder.path, test_set.Name, instance))
-        print(len(a.full_instance_list))
+        # a.get_test_lab_sub_folder_recursively(path)
+        # user_label_list = [
+        #     'L1 Feature',
+        #     'L2 Feature',
+        #     'L3 Feature',
+        #     'L4 Feature'
+        # ]
+        # a.map_dict = a.map_column_label(user_label_list)
+        # # Get test set from test_set_root_path and load instance to list
+        # if a.get_test_set_list(path).count > 0:
+        #     for test_set in a.get_test_set_list(path):
+        #         for instance in a.get_test_instance_list(test_set):
+        #             a.full_instance_list.append(a.get_test_instance_property(path, test_set.Name, instance))
+        # # Get test set from sub folder of test_set_root_path and loal instance to list
+        # for sub_folder in a.full_lab_sub_folder_list:
+        #     for test_set in a.get_test_set_list(sub_folder.Path):
+        #         for instance in a.get_test_instance_list(test_set):
+        #             # print(instance.id)
+        #             a.full_instance_list.append(a.get_test_instance_property(sub_folder.path, test_set.Name, instance))
+        # print(len(a.full_instance_list))
     except Exception as e:
         print(e)
     finally:
