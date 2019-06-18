@@ -2,7 +2,7 @@ import openpyxl
 import os
 
 
-def get_total_execution_detail(result_file_path, test_instance_list):
+def get_execution_detail(result_file_path, test_instance_list):
     try:
         if not os.path.exists(result_file_path):
             print("File Doesn't Exist")
@@ -10,7 +10,7 @@ def get_total_execution_detail(result_file_path, test_instance_list):
             wb.save(result_file_path)
             wb.close()
         wb = openpyxl.load_workbook(result_file_path)
-        sheet_name = "Total Execution Details"
+        sheet_name = "Execution Details"
         if sheet_name in wb.sheetnames:
             print("Sheet already exist, remove and recreate the sheet {}".format(sheet_name))
             wb.remove(wb[sheet_name])
@@ -48,4 +48,4 @@ def get_total_execution_detail(result_file_path, test_instance_list):
 if __name__ == "__main__":
     full_instance_list = ['1', '2']
     file_path = r"C:\My Doc\My Github\ALM_Tool_REBUILD\test.xlsx"
-    get_total_execution_detail(file_path, full_instance_list)
+    get_execution_detail(file_path, full_instance_list)

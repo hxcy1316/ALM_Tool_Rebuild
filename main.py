@@ -34,7 +34,7 @@ def main():
         print(len(alm_instance.full_instance_list))
         # Write to Excel
         file_path = r"C:\My Doc\My Github\ALM_Tool_REBUILD\test.xlsx"
-        excel.get_total_execution_detail(file_path, alm_instance.full_instance_list)
+        excel.get_execution_detail(file_path, alm_instance.full_instance_list)
     # Continue with alm
     except Exception as e:
         print(e)
