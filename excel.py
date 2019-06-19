@@ -86,10 +86,6 @@ class EXCEL():
             if test_id in instance.values():
                 return instance
 
-    # def __get_id_status(self, temp_dict):
-        for key, value in temp_dict.items():
-            return [key, value]
-
     def __format_to_id_status_list(self, full_instance_list):
         # id_status_list = []
         # for instance_dict in full_instance_list:
