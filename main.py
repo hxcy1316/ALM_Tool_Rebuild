@@ -6,9 +6,9 @@ def main():
     url = "http://15.83.240.100/qcbin"
     user_name = "chen.si_hp.com"
     password = "P@ssw0rd"
-    domain = "TEST"
-    project = "Test_WES"
-    path = r"Root\Test_Chen"
+    domain = "DEFAULT"
+    project = "WES_2016"
+    path = r"Root\E625_WES7_2019_OOC"
     user_label_list = [
         'L1 Feature',
         'L2 Feature',
@@ -19,8 +19,10 @@ def main():
     try:
         alm_instance.login()
         alm_instance.get_test_lab_sub_folder_recursively(path)
+        print("Interate test folder successfully")
         alm_instance.map_dict = alm_instance.map_column_label(user_label_list)
         # Get test set from test_set_root_path and load instance to list
+        print("Start pulling test instance ...")
         if alm_instance.get_test_set_list(path).count > 0:
             for test_set in alm_instance.get_test_set_list(path):
                 for instance in alm_instance.get_test_instance_list(test_set):
@@ -38,6 +40,7 @@ def main():
         excel_app = excel.EXCEL(file_path, alm_instance.full_instance_list)
         try:
             excel_app.get_execution_detail()
+            excel_app.get_unique_execution_detail()
         except Exception as e:
             print(e)
         finally:
