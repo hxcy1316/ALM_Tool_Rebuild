@@ -36,7 +36,6 @@ def main():
         print("Add {} instances into list.".format(len(alm_instance.full_instance_list)))
         # Write to Excel
         file_path = r"C:\My Doc\My Github\ALM_Tool_REBUILD\test.xlsx"
-        # excel.get_execution_detail(file_path, alm_instance.full_instance_list)
         excel_app = excel.EXCEL(file_path, alm_instance.full_instance_list)
         try:
             excel_app.get_execution_detail()

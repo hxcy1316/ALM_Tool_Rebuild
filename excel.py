@@ -12,7 +12,7 @@ class EXCEL():
         self.sheet_execution_detail = "Execution Details"
         self.sheet_unique_execution_detail = "Unique Execution Details"
 
-    def __open_sheet(self, sheet_name):
+    def open_sheet(self, sheet_name):
         if not os.path.exists(self.result_file_path):
             print("File Doesn't Exist")
             self.wb.save(self.result_file_path)
@@ -26,7 +26,7 @@ class EXCEL():
         return self.wb[sheet_name]
 
     def get_execution_detail(self):
-        work_sheet = self.__open_sheet(self.sheet_execution_detail)
+        work_sheet = self.open_sheet(self.sheet_execution_detail)
         print("Start initial table in {}".format(work_sheet))
         work_sheet.cell(1, 1).value = "Test ID"
         work_sheet.cell(1, 2).value = "L1 Feature"
@@ -54,7 +54,7 @@ class EXCEL():
         self.wb.save(self.result_file_path)
 
     def get_unique_execution_detail(self):
-        work_sheet = self.__open_sheet(self.sheet_unique_execution_detail)
+        work_sheet = self.open_sheet(self.sheet_unique_execution_detail)
         print("Start initial table in {}".format(work_sheet))
         work_sheet.cell(1, 1).value = "Test ID"
         work_sheet.cell(1, 2).value = "L1 Feature"
