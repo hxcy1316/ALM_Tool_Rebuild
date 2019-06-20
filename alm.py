@@ -3,25 +3,25 @@ import win32com.client
 
 class ALM:
     def __init__(self, url, user_name, password, domain, project):
-        self.url = url
-        self.user_name = user_name
-        self.password = password
-        self.domain = domain
-        self.project = project
+        self.__url = url
+        self.__user_name = user_name
+        self.__password = password
+        self.__domain = domain
+        self.__project = project
         self.map_dict = {}
         self.full_lab_sub_folder_list = []
         self.full_instance_list = []
-        self.td = win32com.client.Dispatch("TDApiOle80.TDConnection")
+        self.__td = win32com.client.Dispatch("TDApiOle80.TDConnection")
 
     def login(self):
-        self.td.InitConnection(self.url)
-        self.td.Login(self.user_name, self.password)
-        self.td.Connect(self.domain, self.project)
-        if self.td.Connected:
-            print("{} login successfully to project {} in domain {}".format(self.user_name, self.project, self.domain))
+        self.__td.InitConnection(self.__url)
+        self.__td.Login(self.__user_name, self.__password)
+        self.__td.Connect(self.__domain, self.__project)
+        if self.__td.Connected:
+            print("{} login successfully to project {} in domain {}".format(self.__user_name, self.__project, self.__domain))
 
-    def get_test_lab_sub_folder(self, parent_path):
-        test_set_folder_factory = self.td.TestSetTreeManager
+    def __get_test_lab_sub_folder(self, parent_path):
+        test_set_folder_factory = self.__td.TestSetTreeManager
         test_set_folder = test_set_folder_factory.NodeByPath(parent_path)
         if test_set_folder.count > 0:
             return test_set_folder.SubNodes
@@ -29,7 +29,7 @@ class ALM:
             return False
 
     def get_test_lab_sub_folder_recursively(self, folder_path):
-        sub_folders_list = self.get_test_lab_sub_folder(folder_path)
+        sub_folders_list = self.__get_test_lab_sub_folder(folder_path)
         if sub_folders_list is not False:
             self.full_lab_sub_folder_list.extend(sub_folders_list)
             for node in sub_folders_list:
@@ -37,7 +37,7 @@ class ALM:
         return self.full_lab_sub_folder_list
 
     def get_test_set_list(self, test_lab_folder_path):
-        test_set_folder_factory = self.td.TestSetTreeManager
+        test_set_folder_factory = self.__td.TestSetTreeManager
         test_set_folder = test_set_folder_factory.NodeByPath(test_lab_folder_path)
         test_set_factory = test_set_folder.TestSetFactory
         test_set_list = test_set_factory.NewList("")
@@ -48,8 +48,8 @@ class ALM:
         test_instance_list = test_instance_factory.NewList("")
         return test_instance_list
 
-    def get_table_column_by_label(self, table, label):
-        field_list = self.td.Fields(table)
+    def __get_table_column_by_label(self, table, label):
+        field_list = self.__td.Fields(table)
         find_label = False
         for field in field_list:
             field_property = field.Property
@@ -64,7 +64,7 @@ class ALM:
         map_column_label_dict = {}
         for label in label_list:
             map_column_label_dict.update(
-                {label: self.get_table_column_by_label("Test", label)})
+                {label: self.__get_table_column_by_label("Test", label)})
         return map_column_label_dict
 
     def get_test_instance_property(self, test_instance_path, test_instance_set_name, test_instance):
@@ -84,7 +84,7 @@ class ALM:
         return instance_property_dict
 
     def get_test_case_property(self, test_case_id):
-        test_factory = self.td.TestFactory
+        test_factory = self.__td.TestFactory
         test_filter = test_factory.Filter
         test_filter["TS_TEST_ID"] = test_case_id
         test_list = test_filter.NewList()
@@ -100,7 +100,7 @@ class ALM:
         return case_property_dict
 
     def disconnect(self):
-        self.td.Disconnect()
+        self.__td.Disconnect()
 
 
 if __name__ == "__main__":
