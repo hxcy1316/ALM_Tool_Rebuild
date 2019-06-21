@@ -89,12 +89,27 @@ def main():
                 })
             data_frame_total = data_frame_total.drop(
                 ['Failed', 'No Run', 'NA', 'Block', 'Not Completed'], axis=1)
-            # Join two data frame together
+            columns_order = [
+                'Total_Planned_Test',
+                'Total_Executed_Test',
+                'Total_Passed_Test',
+                'Unique_Planned_Test',
+                'Unique_Executed_Test',
+                'Unique_Passed_Test'
+            ]
+            # Join two data frame together and reset the index
             merged_data_frame = data_frame_total.join(data_frame_unique)
-            print(merged_data_frame.columns)
-            print(merged_data_frame)
+            merged_data_frame = merged_data_frame[columns_order]
+            merged_data_frame = merged_data_frame.reset_index(level=['L1 Feature', 'L2 Feature', 'L3 Feature', 'L4 Feature'])
         except Exception as e:
             print(e)
+        # Write merged_data_frame back to new excel sheet
+        try:
+            data_array = merged_data_frame.get_values().tolist()
+            excel_app.load_array_to_sheet(data_array, excel_app.sheet_execution_summary)
+        except Exception as e:
+            print(e)
+
     # Continue with overall
     except Exception as e:
         print(e)

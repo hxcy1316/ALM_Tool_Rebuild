@@ -11,6 +11,7 @@ class EXCEL():
         self.wb = openpyxl.Workbook()
         self.sheet_execution_detail = "Execution Details"
         self.sheet_unique_execution_detail = "Unique Execution Details"
+        self.sheet_execution_summary = "Execution Summary"
 
     def open_sheet(self, sheet_name):
         if not os.path.exists(self.result_file_path):
@@ -26,17 +27,19 @@ class EXCEL():
         return self.wb[sheet_name]
 
     def get_execution_detail(self):
-        work_sheet = self.open_sheet(self.sheet_execution_detail)
+        sheet_column_names = [
+            "Test ID",
+            "L1 Feature",
+            "L2 Feature",
+            "L3 Feature",
+            "L4 Feature",
+            "Test_instance_path",
+            "Test_set_name",
+            "Test Instance ID",
+            "Test_instance_status"
+        ]
+        work_sheet = self.__initial_column_name(self.sheet_execution_detail, sheet_column_names)
         print("Start initial table in {}".format(work_sheet))
-        work_sheet.cell(1, 1).value = "Test ID"
-        work_sheet.cell(1, 2).value = "L1 Feature"
-        work_sheet.cell(1, 3).value = "L2 Feature"
-        work_sheet.cell(1, 4).value = "L3 Feature"
-        work_sheet.cell(1, 5).value = "L4 Feature"
-        work_sheet.cell(1, 6).value = "Test_instance_path"
-        work_sheet.cell(1, 7).value = "Test_set_name"
-        work_sheet.cell(1, 8).value = "Test Instance ID"
-        work_sheet.cell(1, 9).value = "Test_instance_status"
         row = 2
         print("Start filling the data ...")
         for test_instance in self.test_instance_list:
@@ -53,15 +56,17 @@ class EXCEL():
         print("End filling data in sheet {}".format(self.sheet_execution_detail))
         self.wb.save(self.result_file_path)
 
-    def get_unique_execution_detail(self):
-        work_sheet = self.open_sheet(self.sheet_unique_execution_detail)
+    def get_unique_execution_detail(self):  
+        sheet_column_names = [
+            "Test ID",
+            "L1 Feature",
+            "L2 Feature",
+            "L3 Feature",
+            "L4 Feature",
+            "Unique Status"
+        ]
+        work_sheet = self.__initial_column_name(self.sheet_unique_execution_detail, sheet_column_names)
         print("Start initial table in {}".format(work_sheet))
-        work_sheet.cell(1, 1).value = "Test ID"
-        work_sheet.cell(1, 2).value = "L1 Feature"
-        work_sheet.cell(1, 3).value = "L2 Feature"
-        work_sheet.cell(1, 4).value = "L3 Feature"
-        work_sheet.cell(1, 5).value = "L4 Feature"
-        work_sheet.cell(1, 6).value = "Unique Status"
         row = 2
         # unique_instance_dict = {<id>: <status>, <id>: <status>, ...}
         self.unique_instance_dict = self.__format_to_unique_id_status_list(self.__format_to_id_status_list(self.test_instance_list))
@@ -80,6 +85,30 @@ class EXCEL():
             row = row + 1
         print("End filling data in sheet {}".format(self.sheet_unique_execution_detail))
         self.wb.save(self.result_file_path)
+
+    def load_array_to_sheet(self, arr, sheet_name):
+        sheet_column_names = [
+            'L1 Feature',
+            'L2 Feature',
+            'L3 Feature',
+            'L4 Feature',
+            'Total_Planed_Test',
+            'Total_Executed_Test',
+            'Total_Passed_Test',
+            'Unique_Planned_Test',
+            'Unique_Executed_Test',
+            'Unique_Passed_Test'
+        ]
+        sheet = self.__initial_column_name(sheet_name, sheet_column_names)
+        for row in arr:
+            sheet.append(row)
+        self.wb.save(self.result_file_path)
+
+    def __initial_column_name(self, sheet_name, name_list):
+        sheet = self.open_sheet(sheet_name)
+        sheet.append(name_list)
+        self.wb.save(self.result_file_path)
+        return sheet
 
     def __get_properties_by_id(self, test_id, instance_list):
         for instance in instance_list:

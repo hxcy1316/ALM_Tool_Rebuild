@@ -11,7 +11,7 @@ class PD():
 
     def get_data_frame(self, file_path, sheet_name):
         data_frame = pd.DataFrame(self.__read_excel(file_path, sheet_name))
-        print("Load excel data to pandas Data Frame format successfully")
+        print("Load excel data from sheet {} to pandas Data Frame format successfully".format(sheet_name))
         return data_frame
 
     def pivot_data_frame_total(self, data_frame):
