@@ -46,8 +46,9 @@ class PD():
     def __add_summary_columns(self, pivot_data_frame):
         # "{0:.0f}%".format(0.33 * 100)
         pivot_data_frame = pivot_data_frame.assign(Executed_Test=lambda x: (x['Passed'] + x['Failed']))
-        pivot_data_frame = pivot_data_frame.assign(Execution_Rate=lambda x: ((x['Executed_Test']) / x['All']) * 100)
-        pivot_data_frame = pivot_data_frame.assign(Pass_Rate=lambda x: (x['Passed'] / x['All']) * 100)
+        # Don't caculate here as the summarize will be impacted by Excel Group Sub Total
+        # pivot_data_frame = pivot_data_frame.assign(Execution_Rate=lambda x: ((x['Executed_Test']) / x['All']) * 100)
+        # pivot_data_frame = pivot_data_frame.assign(Pass_Rate=lambda x: (x['Passed'] / x['All']) * 100)
         return pivot_data_frame
 
     def __add_status_columns(self, pivot_data_frame, column_list):
