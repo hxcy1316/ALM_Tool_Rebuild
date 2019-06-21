@@ -36,18 +36,19 @@ class PD():
             aggfunc=len,
             fill_value=0,
             margins=True)
-        return pivoted_data_frame   
+        return pivoted_data_frame
 
     def format_pivot_data_frame(self, pivot_data_frame, column_list):
-        full_status_data_frame = self.__add_status_columns(pivot_data_frame, column_list)
-        formatted_data_frame = self.__add_summary_columns(full_status_data_frame)
-        return formatted_data_frame
-    
+        status_data_frame = self.__add_status_columns(pivot_data_frame, column_list)
+        format_data_frame = self.__add_summary_columns(status_data_frame)
+        return format_data_frame
+
     def __add_summary_columns(self, pivot_data_frame):
         # "{0:.0f}%".format(0.33 * 100)
-        pivot_data_frame = pivot_data_frame.assign(Total_Execution_Rate=lambda x: ((x['Failed'] + x['Passed']) / x['All']) * 100)
-        pivot_data_frame_final = pivot_data_frame.assign(Total_Pass_Details=lambda x: (x['Passed'] / x['All']) * 100)
-        return pivot_data_frame_final
+        pivot_data_frame = pivot_data_frame.assign(Executed_Test=lambda x: (x['Passed'] + x['Failed']))
+        pivot_data_frame = pivot_data_frame.assign(Execution_Rate=lambda x: ((x['Executed_Test']) / x['All']) * 100)
+        pivot_data_frame = pivot_data_frame.assign(Pass_Rate=lambda x: (x['Passed'] / x['All']) * 100)
+        return pivot_data_frame
 
     def __add_status_columns(self, pivot_data_frame, column_list):
         kwargs = self.__init_status_columns(pivot_data_frame, column_list)
