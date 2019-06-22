@@ -62,10 +62,9 @@ def main():
                 columns={
                     'Passed': 'Unique_Passed_Test',
                     'Executed_Test': 'Unique_Executed_Test',
-                    'All': 'Unique_Planned_Test'
-                    # Pass Rate and Execution Rate will be caculated in Excel after Group Sub Total
-                    # 'Pass_Rate': 'Unique_Pass_Rate',
-                    # 'Execution_Rate': 'Unique_Execution_Rate'
+                    'All': 'Unique_Planned_Test',
+                    'Pass_Rate': 'Unique_Pass_Rate',
+                    'Execution_Rate': 'Unique_Execution_Rate'
                 })
             data_frame_unique = data_frame_unique.drop(['Failed', 'No Run'],
                                                        axis=1)
@@ -82,31 +81,39 @@ def main():
                 columns={
                     'Passed': 'Total_Passed_Test',
                     'Executed_Test': 'Total_Executed_Test',
-                    'All': 'Total_Planned_Test'
-                    # Pass Rate and Execution Rate will be caculated in Excel after Group Sub Total
-                    # 'Pass_Rate': 'Total_Pass_Rate',
-                    # 'Execution_Rate': 'Total_Execution_Rate'
+                    'All': 'Total_Planned_Test',
+                    'Pass_Rate': 'Total_Pass_Rate',
+                    'Execution_Rate': 'Total_Execution_Rate'
                 })
             data_frame_total = data_frame_total.drop(
                 ['Failed', 'No Run', 'NA', 'Block', 'Not Completed'], axis=1)
             columns_order = [
+                'Unique_Planned_Test',
+                'Unique_Executed_Test',
+                'Unique_Passed_Test',
+                'Unique_Execution_Rate',
+                'Unique_Pass_Rate',
                 'Total_Planned_Test',
                 'Total_Executed_Test',
                 'Total_Passed_Test',
-                'Unique_Planned_Test',
-                'Unique_Executed_Test',
-                'Unique_Passed_Test'
+                'Total_Execution_Rate',
+                'Total_Pass_Rate'
             ]
             # Join two data frame together and reset the index
             merged_data_frame = data_frame_total.join(data_frame_unique)
             merged_data_frame = merged_data_frame[columns_order]
             merged_data_frame = merged_data_frame.reset_index(level=['L1 Feature', 'L2 Feature', 'L3 Feature', 'L4 Feature'])
+            # Remove the last 'All' row
+            merged_data_frame.drop(merged_data_frame.tail(1).index, inplace=True)
         except Exception as e:
             print(e)
         # Write merged_data_frame back to new excel sheet
         try:
             data_array = merged_data_frame.get_values().tolist()
             excel_app.load_array_to_sheet(data_array, excel_app.sheet_execution_summary)
+            print("Load data successfully in sheet {}. Start formating ...".format(excel_app.sheet_execution_summary))
+            # Start formating
+            # TODO
         except Exception as e:
             print(e)
 

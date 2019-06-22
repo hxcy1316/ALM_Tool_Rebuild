@@ -19,7 +19,7 @@ class EXCEL():
             self.wb.save(self.result_file_path)
             self.wb.close()
         self.wb = openpyxl.load_workbook(self.result_file_path)
-        print("Open workbook {} successfully".format(self.result_file_path))
+        print("Load workbook {} successfully".format(self.result_file_path))
         if sheet_name in self.wb.sheetnames:
             print("Sheet already exist, remove and recreate the sheet {}".format(sheet_name))
             self.wb.remove(self.wb[sheet_name])
@@ -56,7 +56,7 @@ class EXCEL():
         print("End filling data in sheet {}".format(self.sheet_execution_detail))
         self.wb.save(self.result_file_path)
 
-    def get_unique_execution_detail(self):  
+    def get_unique_execution_detail(self):
         sheet_column_names = [
             "Test ID",
             "L1 Feature",
@@ -95,14 +95,39 @@ class EXCEL():
             'Total_Planed_Test',
             'Total_Executed_Test',
             'Total_Passed_Test',
+            'Total_Execution_Rate',
+            'Total_Pass_Rate',
             'Unique_Planned_Test',
             'Unique_Executed_Test',
-            'Unique_Passed_Test'
+            'Unique_Passed_Test',
+            'Unique_Execution_Rate',
+            'Unique_Pass_Rate'
         ]
         sheet = self.__initial_column_name(sheet_name, sheet_column_names)
         for row in arr:
             sheet.append(row)
         self.wb.save(self.result_file_path)
+        return sheet
+
+    def format_execution_summary(self, sheet):
+        ws_summary = sheet
+        row_count = ws_summary.max_row
+        for row in ws_summary.iter_rows(min_row=2, max_row=row_count, min_col=5, max_col=14):
+            # row[0 - 4]: Unique [Planned, Executed, Passed, Execution Rate, Pass Rate]
+            # row[5 - 9]: Total [Planned, Executed, Passed, Execution Rate, Pass Rate]
+            row[3].number_format = '0%'
+            row[4].number_format = '0%'
+            row[8].number_format = '0%'
+            row[9].number_format = '0%'
+        self.wb.save(file_path)
+        return ws_summary
+
+    def caculate_percentage(self, up_value, down_value):
+        if down_value == 0:
+            percentage = 0
+        else:
+            percentage = round(up_value / down_value, 2)
+        return percentage
 
     def __initial_column_name(self, sheet_name, name_list):
         sheet = self.open_sheet(sheet_name)
