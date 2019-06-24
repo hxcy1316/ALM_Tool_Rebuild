@@ -117,7 +117,7 @@ def Get_Execution_Summary():
         print("Load data successfully in sheet {}. Start formating ...".format(
             excel_app.sheet_execution_summary))
         # Format with Win32com
-        # excel.format_execution_summary(file_path, excel_app.sheet_execution_summary)
+        excel.format_execution_summary(file_path, excel_app.sheet_execution_summary)
     except Exception as e:
         print(e)
     finally:
