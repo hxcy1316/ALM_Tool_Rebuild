@@ -1,6 +1,7 @@
 import openpyxl
 import os
 from functools import reduce
+from win32com.client import Dispatch
 
 
 class EXCEL():
@@ -176,6 +177,86 @@ class EXCEL():
 
     def close(self):
         self.wb.close()
+
+
+def format_execution_summary(file_path, sheet_name):
+    try:
+        excel_win32 = Dispatch("Excel.Application")
+        excel_win32.Visible = True
+        wb = excel_win32.Workbooks.Open(file_path)
+        ws = wb.Worksheets(sheet_name)
+        ws.Activate()
+        myrange_NA = ws.Range(ws.cells(1, 1), ws.cells(ws.usedRange.rows.count, 4))
+        for cell in myrange_NA:
+            if cell.value == "NA":
+                cell.value = ""
+        wb.Save()
+        myrange1 = ws.Range(ws.cells(1, 1), ws.cells(ws.usedRange.rows.count, 14))
+        myrange1.Subtotal(
+            GroupBy=1,
+            Function=-4157,
+            TotalList=[5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
+            Replace=False,
+            PageBreaks=False,
+            SummaryBelowData=True
+        )
+        myrange2 = ws.Range(ws.cells(1, 2), ws.cells(ws.usedRange.rows.count, 14))
+        myrange2.Subtotal(
+            GroupBy=1,
+            Function=-4157,
+            TotalList=[4, 5, 6, 7, 8, 9, 10, 11, 12, 13],
+            Replace=False,
+            PageBreaks=False,
+            SummaryBelowData=True
+        )
+        myrange3 = ws.Range(ws.cells(1, 3), ws.cells(ws.usedRange.rows.count, 14))
+        myrange3.Subtotal(
+            GroupBy=1,
+            Function=-4157,
+            TotalList=[3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            Replace=False,
+            PageBreaks=False,
+            SummaryBelowData=True
+        )
+        ws.Columns.AutoFit()
+        wb.Save()
+        for i in range(2, ws.usedRange.rows.count + 1):
+            find_cell_list = [
+                str(ws.cells(i, 1).value).find("Total", -5),
+                str(ws.cells(i, 2).value).find("Total", -5),
+                str(ws.cells(i, 3).value).find("Total", -5)
+            ]
+            if max(find_cell_list) >= 0:
+                if ws.cells(i, 5).value == 0:
+                    ws.cells(i, 8).value = 0
+                    ws.cells(i, 9).value = 0
+                else:
+                    ws.cells(i, 8).value = round(ws.cells(i, 6).value / ws.cells(i, 5).value, 2)
+                    ws.cells(i, 9).value = round(ws.cells(i, 7).value / ws.cells(i, 5).value, 2)
+                if ws.cells(i, 10).value == 0:
+                    ws.cells(i, 13).value = 0
+                    ws.cells(i, 14).value = 0
+                else:
+                    ws.cells(i, 13).value = round(ws.cells(i, 11).value / ws.cells(i, 10).value, 2)
+                    ws.cells(i, 14).value = round(ws.cells(i, 12).value / ws.cells(i, 10).value, 2)
+        ws.Range(ws.cells(2, 8), ws.cells(ws.usedRange.rows.count, 9)).Style = "Percent"
+        ws.Range(ws.cells(2, 13), ws.cells(ws.usedRange.rows.count, 14)).Style = "Percent"
+        wb.Save()
+        ws.cells.EntireColumn.Hidden = False
+        ws.Range("A1:P1").WrapText = True
+        ws.Range("A1:P1").Font.Bold = True
+        ws.Range(ws.cells(1, 1), ws.cells(ws.usedRange.rows.count, ws.usedRange.columns.count)).Borders.LineStyle = 1
+        ws.Range(ws.cells(1, 5), ws.cells(ws.usedRange.rows.count, 9)).Interior.Color = 220 + 230 * 256 + 241 * 256 * 256
+        ws.Range(ws.cells(1, 10), ws.cells(ws.usedRange.rows.count, 14)).Interior.Color = 242 + 220 * 256 + 219 * 256 * 256
+        ws.Range(ws.cells(1, 6), ws.cells(ws.usedRange.rows.count, 7)).EntireColumn.Hidden = True
+        ws.Range(ws.cells(1, 11), ws.cells(ws.usedRange.rows.count, 12)).EntireColumn.Hidden = True
+        ws.Range(ws.cells(1, 9), ws.cells(ws.usedRange.rows.count, 9)).Font.Bold = True
+        ws.Range(ws.cells(1, 14), ws.cells(ws.usedRange.rows.count, 14)).Font.Bold = True
+    except Exception as e:
+        print(e)
+    finally:
+        wb = None
+        excel_win32 = None
 
 
 if __name__ == "__main__":
