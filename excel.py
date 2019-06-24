@@ -93,16 +93,16 @@ class EXCEL():
             'L2 Feature',
             'L3 Feature',
             'L4 Feature',
-            'Total_Planed_Test',
-            'Total_Executed_Test',
-            'Total_Passed_Test',
-            'Total_Execution_Rate',
-            'Total_Pass_Rate',
             'Unique_Planned_Test',
             'Unique_Executed_Test',
             'Unique_Passed_Test',
             'Unique_Execution_Rate',
-            'Unique_Pass_Rate'
+            'Unique_Pass_Rate',
+            'Total_Planed_Test',
+            'Total_Executed_Test',
+            'Total_Passed_Test',
+            'Total_Execution_Rate',
+            'Total_Pass_Rate'
         ]
         sheet = self.__initial_column_name(sheet_name, sheet_column_names)
         for row in arr:
@@ -252,6 +252,8 @@ def format_execution_summary(file_path, sheet_name):
         ws.Range(ws.cells(1, 11), ws.cells(ws.usedRange.rows.count, 12)).EntireColumn.Hidden = True
         ws.Range(ws.cells(1, 9), ws.cells(ws.usedRange.rows.count, 9)).Font.Bold = True
         ws.Range(ws.cells(1, 14), ws.cells(ws.usedRange.rows.count, 14)).Font.Bold = True
+        wb.Save()
+        print("Format finish, refer to '{}' for details".format(sheet_name))
     except Exception as e:
         print(e)
     finally:

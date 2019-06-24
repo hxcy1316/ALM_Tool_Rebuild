@@ -1,6 +1,8 @@
 import alm
 import excel
 import pandas_handler
+import os
+from datetime import datetime
 
 
 def Get_Execution_Summary():
@@ -44,7 +46,9 @@ def Get_Execution_Summary():
     #
     # Write to Excel
     try:
-        file_path = r"C:\My Doc\My Github\ALM_Tool_REBUILD\test.xlsx"
+        now = datetime.now()
+        dt_string = now.strftime("%Y_%m_%d_%H_%M_%S")
+        file_path = os.path.join(os.getcwd(), "Project_Execution_Status_" + dt_string + "." + "xlsx")
         excel_app = excel.EXCEL(file_path, alm_instance.full_instance_list)
         excel_app.get_execution_detail()
         excel_app.get_unique_execution_detail()
@@ -113,7 +117,7 @@ def Get_Execution_Summary():
         print("Load data successfully in sheet {}. Start formating ...".format(
             excel_app.sheet_execution_summary))
         # Format with Win32com
-        excel.format_execution_summary(file_path, excel_app.sheet_execution_summary)
+        # excel.format_execution_summary(file_path, excel_app.sheet_execution_summary)
     except Exception as e:
         print(e)
     finally:
