@@ -262,6 +262,7 @@ def format_execution_summary(file_path, sheet_name):
 
 
 if __name__ == "__main__":
-    full_instance_list = ['1', '2']
-    file_path = r"C:\My Doc\My Github\ALM_Tool_REBUILD\test.xlsx"
-    # get_execution_detail(file_path, full_instance_list)
+    pass
+    # full_instance_list = ['1', '2']
+    # file_path = r"C:\My Doc\My Github\ALM_Tool_REBUILD\test.xlsx"
+    # # get_execution_detail(file_path, full_instance_list)
