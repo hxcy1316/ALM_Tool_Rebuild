@@ -120,7 +120,7 @@ class EXCEL():
             row[4].number_format = '0%'
             row[8].number_format = '0%'
             row[9].number_format = '0%'
-        self.wb.save(file_path)
+        self.wb.save(self.result_file_path)
         return ws_summary
 
     def caculate_percentage(self, up_value, down_value):
@@ -257,7 +257,7 @@ def format_execution_summary(file_path, sheet_name):
     except Exception as e:
         print(e)
     finally:
-        wb.close()
+        wb.close
         wb = None
         excel_win32 = None
 

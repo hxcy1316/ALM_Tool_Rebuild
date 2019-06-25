@@ -6,12 +6,6 @@ from datetime import datetime
 
 
 def Get_Execution_Summary(url, user_name, password, domain, project, path):
-    # url = "http://15.83.240.100/qcbin"
-    # user_name = "chen.si_hp.com"
-    # password = "P@ssw0rd"
-    # domain = "DEFAULT"
-    # project = "WES_2016"
-    # path = r"Root\E625_WES7_2019_OOC"
     user_label_list = ['L1 Feature', 'L2 Feature', 'L3 Feature', 'L4 Feature']
     alm_instance = alm.ALM(url, user_name, password, domain, project)
     #
@@ -126,4 +120,11 @@ def Get_Execution_Summary(url, user_name, password, domain, project, path):
 
 
 if __name__ == "__main__":
-    Get_Execution_Summary()
+    pass
+    # url = "http://15.83.240.100/qcbin"
+    # user_name = "chen.si_hp.com"
+    # password = ""
+    # domain = "TEST"
+    # project = "TEST_WES"
+    # path = r"Root\Test_Chen"
+    # Get_Execution_Summary(url, user_name, password, domain, project, path)
