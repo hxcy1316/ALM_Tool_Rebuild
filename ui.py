@@ -10,7 +10,7 @@ class GUI(tk.Frame):
 
         self.url_Label = tk.Label(master, text="ALM Address:")
         self.url_Label.grid(row=0, column=0, padx=10, pady=10)
-        self.url_Entry = tk.StringVar()
+        self.url_Entry = tk.StringVar(value="http://15.83.240.100/qcbin")
         self.url_Entry = tk.Entry(textvariable=self.url_Entry, width=50)
         self.url_Entry.grid(row=0, column=1, padx=10, pady=10)
 
@@ -23,12 +23,12 @@ class GUI(tk.Frame):
         self.password_Label = tk.Label(master, text="Password:")
         self.password_Label.grid(row=2, column=0, padx=10, pady=10)
         self.password_Entry = tk.StringVar()
-        self.password_Entry = tk.Entry(textvariable=self.password_Entry, width=50)
+        self.password_Entry = tk.Entry(textvariable=self.password_Entry, show="*", width=50)
         self.password_Entry.grid(row=2, column=1, padx=10, pady=10)
 
         self.domain_Label = tk.Label(master, text="Domain:")
         self.domain_Label.grid(row=3, column=0, padx=10, pady=10)
-        self.domain_Entry = tk.StringVar()
+        self.domain_Entry = tk.StringVar(value="DEFAULT")
         self.domain_Entry = tk.Entry(textvariable=self.domain_Entry, width=50)
         self.domain_Entry.grid(row=3, column=1, padx=10, pady=10)
 

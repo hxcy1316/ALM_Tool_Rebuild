@@ -182,7 +182,7 @@ class EXCEL():
 def format_execution_summary(file_path, sheet_name):
     try:
         excel_win32 = Dispatch("Excel.Application")
-        excel_win32.Visible = True
+        excel_win32.Visible = False
         wb = excel_win32.Workbooks.Open(file_path)
         ws = wb.Worksheets(sheet_name)
         ws.Activate()
@@ -257,6 +257,7 @@ def format_execution_summary(file_path, sheet_name):
     except Exception as e:
         print(e)
     finally:
+        wb.close()
         wb = None
         excel_win32 = None
 
