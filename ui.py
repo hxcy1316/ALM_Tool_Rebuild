@@ -2,6 +2,7 @@ import tkinter as tk
 import main
 import pickle
 
+# Iverson edit
 
 FILENAME = "previous.pickle"
 
